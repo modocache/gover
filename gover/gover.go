@@ -41,6 +41,11 @@ func Gover(root, out string) {
 
 		readBytes, readErr := ioutil.ReadFile(path)
 		if readErr == nil {
+			// Check if last character is new line, if not append it
+			if !bytes.HasSuffix(readBytes, []byte("\n")) {
+				readBytes = append(readBytes, []byte("\n")...)
+			}
+
 			readStr := string(readBytes)
 
 			re, _ := regexp.Compile("^mode: [a-z]+\n")
