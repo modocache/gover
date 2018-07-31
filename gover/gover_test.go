@@ -89,6 +89,16 @@ var _ = Describe("Gover", func() {
 				})
 			})
 
+			Context("and it contains several .coverprofile files missing new line", func() {
+				BeforeEach(func() {
+					root = filepath.Join(fixturesDir(), "without_new_line_cover_profiles")
+				})
+				It("writes their content to out", func() {
+					Gover(root, out)
+					Expect(readFile(out)).To(Equal("mode: set\npart two\na thief's end\nghost of sparta\n"))
+				})
+			})
+
 			Context("and it contains some .coverprofile files that can't be read", func() {
 				var tmpPath string
 				BeforeEach(func() {

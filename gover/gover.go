@@ -42,6 +42,8 @@ func Gover(root, out string) {
 	}
 
 	walkFn := func(path string, info os.FileInfo, err error) error {
+		var readStr string
+
 		if filepath.Ext(path) != Extension {
 			return err
 		}
@@ -50,8 +52,16 @@ func Gover(root, out string) {
 		}
 
 		readBytes, readErr := ioutil.ReadFile(path)
+		log.Println("Parse newline", string(readBytes))
 		if readErr == nil {
-			readStr := string(readBytes)
+			// Check to add "\n" if last character is not new line
+			if !bytes.HasSuffix(readBytes, []byte("\n")) {
+				log.Println("Get a entry without newline", string(readBytes))
+				readStr = string(readBytes) + "\n"
+			} else {
+				log.Println("Get a entry with newline", string(readBytes))
+				readStr = string(readBytes)
+			}
 
 			re, _ := regexp.Compile("^mode: [a-z]+\n")
 			if re.Match(buffer.Bytes()) {
